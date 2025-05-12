@@ -71,65 +71,51 @@ export function postProcessNoteData(
     });
 
     // --- 2. MathJax DIV Transformation (to <anki-mathjax block="true">) ---
-    try {
-      const mathDivs = body.querySelectorAll(
-        'div.math-rendered[data-lexical-math="true"]'
+    const mathDivs = body.querySelectorAll(
+      'div.math-rendered[data-lexical-math="true"]'
+    );
+    mathDivs.forEach((div) => {
+      const ankiMathJax = doc.createElement("anki-mathjax");
+      ankiMathJax.setAttribute("block", "true");
+
+      const originalInnerHTML = div.innerHTML;
+      ankiMathJax.innerHTML = stripDelimiters(
+        originalInnerHTML,
+        displayDelimPairs
       );
-      mathDivs.forEach((div) => {
-        const ankiMathJax = doc.createElement("anki-mathjax");
-        for (const attr of Array.from(div.attributes)) {
-          ankiMathJax.setAttribute(attr.name, attr.value);
-        }
-        ankiMathJax.setAttribute("block", "true");
 
-        const originalInnerHTML = div.innerHTML;
-        ankiMathJax.innerHTML = stripDelimiters(
-          originalInnerHTML,
-          displayDelimPairs
+      if (div.parentNode) {
+        div.parentNode.replaceChild(ankiMathJax, div);
+      } else {
+        console.warn(
+          "Found a math div without a parentNode, cannot replace:",
+          div
         );
-
-        if (div.parentNode) {
-          div.parentNode.replaceChild(ankiMathJax, div);
-        } else {
-          console.warn(
-            "Found a math div without a parentNode, cannot replace:",
-            div
-          );
-        }
-      });
-    } catch (e) {
-      console.error("Error during MathJax DIV transformation:", e);
-    }
+      }
+    });
 
     // --- 3. MathJax SPAN Transformation (to <anki-mathjax>) ---
-    try {
-      const mathSpans = body.querySelectorAll(
-        'span.math-rendered[data-lexical-math="true"]'
+    const mathSpans = body.querySelectorAll(
+      'span.math-rendered[data-lexical-math="true"]'
+    );
+    mathSpans.forEach((span) => {
+      const ankiMathJax = doc.createElement("anki-mathjax");
+
+      const originalInnerHTML = span.innerHTML;
+      ankiMathJax.innerHTML = stripDelimiters(
+        originalInnerHTML,
+        inlineDelimPairs
       );
-      mathSpans.forEach((span) => {
-        const ankiMathJax = doc.createElement("anki-mathjax");
-        for (const attr of Array.from(span.attributes)) {
-          ankiMathJax.setAttribute(attr.name, attr.value);
-        }
 
-        const originalInnerHTML = span.innerHTML;
-        ankiMathJax.innerHTML = stripDelimiters(
-          originalInnerHTML,
-          inlineDelimPairs
+      if (span.parentNode) {
+        span.parentNode.replaceChild(ankiMathJax, span);
+      } else {
+        console.warn(
+          "Found a math span without a parentNode, cannot replace:",
+          span
         );
-
-        if (span.parentNode) {
-          span.parentNode.replaceChild(ankiMathJax, span);
-        } else {
-          console.warn(
-            "Found a math span without a parentNode, cannot replace:",
-            span
-          );
-        }
-      });
-    } catch (e) {
-      console.error("Error during MathJax SPAN transformation:", e);
-    }
+      }
+    });
 
     // --- 4. Serialization ---
     processedFields[fieldName] = body.innerHTML;
