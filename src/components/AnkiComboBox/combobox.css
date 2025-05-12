@@ -1,0 +1,244 @@
+@import "../../react-aria-theme.css";
+
+.anki-combobox-input-grp {
+  display: flex;
+  align-items: center;
+}
+
+.anki-combobox {
+  color: var(--text-color);
+
+  .anki-combobox-input {
+    margin: 0;
+    font-size: 1.072rem;
+    background: var(--field-background);
+    color: var(--field-text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0.286rem 2rem 0.286rem 0.571rem;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+
+    &[data-focused] {
+      outline: 2px solid var(--focus-ring-color);
+      outline-offset: -1px;
+    }
+  }
+
+  .anki-combobox-btn {
+    background: var(--highlight-background);
+    color: var(--highlight-foreground);
+    forced-color-adjust: none;
+    border-radius: 4px;
+    border: none;
+    margin-left: -1.714rem;
+    width: 1.429rem;
+    height: 1.429rem;
+    padding: 0;
+    cursor: default;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &[data-pressed] {
+      box-shadow: none;
+      background: var(--highlight-background);
+    }
+
+    &[data-disabled] {
+      background: var(--text-color-disabled);
+    }
+  }
+}
+
+.anki-combobox-popover[data-trigger="ComboBox"] {
+  width: var(--trigger-width);
+  --background-color: var(--overlay-background);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 20px rgba(0 0 0 / 0.1);
+  border-radius: 6px;
+  background: var(--background-color);
+  color: var(--text-color);
+  outline: none;
+  transition: transform 200ms, opacity 200ms;
+
+  &[data-entering],
+  &[data-exiting] {
+    transform: var(--origin);
+    opacity: 0;
+  }
+
+  &[data-placement="top"] {
+    --origin: translateY(8px);
+  }
+
+  &[data-placement="bottom"] {
+    --origin: translateY(-8px);
+  }
+
+  .anki-combobox-listbox {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    padding: 2px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--overlay-background);
+    forced-color-adjust: none;
+    outline: none;
+    max-height: 360px;
+    box-sizing: border-box;
+  }
+}
+
+.anki-combobox-listbox > .react-aria-ListBoxItem {
+  margin: 2px;
+  padding: 0.286rem 0.571rem;
+  border-radius: 6px;
+  outline: none;
+  cursor: default;
+  color: var(--text-color);
+  font-size: 1.072rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  &[data-focus-visible] {
+    outline: none;
+  }
+
+  &[data-selected] {
+    font-weight: bold;
+    background: unset;
+    color: var(--text-color);
+
+    &::before {
+      content: "✓";
+      content: "✓" / "";
+      alt: " ";
+      position: absolute;
+      top: 50%;
+      right: 8px;
+      left: auto;
+      transform: translateY(-50%);
+    }
+  }
+
+  &[data-focused],
+  &[data-pressed] {
+    background: var(--highlight-background);
+    color: var(--highlight-foreground);
+  }
+}
+
+.anki-combobox-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.anki-combobox-label {
+  color: var(--text-color);
+}
+
+.anki-combobox-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  cursor: pointer;
+  border: none;
+  color: var(--text-color);
+  padding: 0;
+
+  &[data-disabled] {
+    color: var(--text-color-disabled);
+  }
+}
+
+.error-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: var(--visual-viewport-height);
+  background: rgba(0 0 0 / 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+
+  &[data-entering] {
+    animation: modal-fade 200ms;
+  }
+
+  &[data-exiting] {
+    animation: modal-fade 150ms reverse ease-in;
+  }
+}
+
+.error-modal {
+  box-shadow: 0 8px 20px rgba(0 0 0 / 0.1);
+  border-radius: 6px;
+  background: var(--overlay-background);
+  color: var(--text-color);
+  border: 1px solid var(--gray-400);
+  outline: none;
+  max-width: 300px;
+
+  &[data-entering] {
+    animation: modal-zoom 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+}
+
+.error-dialog {
+  outline: none;
+  padding: 30px;
+  max-height: inherit;
+  box-sizing: border-box;
+  overflow: auto;
+  position: relative;
+
+  .error-heading[slot="title"] {
+    line-height: 1em;
+    margin-top: 0;
+  }
+}
+
+.error-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--text-color);
+  z-index: 1;
+}
+
+@keyframes modal-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-zoom {
+  from {
+    transform: scale(0.8);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}

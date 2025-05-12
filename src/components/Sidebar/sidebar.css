@@ -1,0 +1,142 @@
+@import "../../react-aria-theme.css";
+
+.sidebar-container {
+  display: flex;
+  position: relative;
+  min-height: 100vh;
+}
+
+.sidebar {
+  height: 100%;
+  background-color: #f8f8f8;
+  border-right: 1px solid #ccc;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  transition: width 0.3s ease;
+}
+
+.sidebar.dragging {
+  transition: none;
+  user-select: none;
+}
+
+.sidebar.sidebar-resize-end {
+  transition: width 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.closed {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  /* Width is now controlled by the collapsedWidth prop */
+  overflow: hidden;
+}
+
+.sidebar.closed .sidebar-content {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 16px;
+  padding: 16px;
+}
+
+.drag-handle {
+  position: absolute;
+  top: 0;
+  right: -5px;
+  width: 10px;
+  height: 100%;
+  cursor: ew-resize;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar.closed .drag-handle {
+  display: none;
+}
+
+.drag-handle-indicator {
+  height: 40px;
+  width: 4px;
+  background-color: transparent;
+  border-radius: 2px;
+  transition: background-color 0.2s ease;
+}
+
+.drag-handle:hover .drag-handle-indicator {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.drag-handle.active .drag-handle-indicator {
+  background-color: rgba(0, 0, 0, 0.3);
+  height: 60px;
+}
+
+/* Global styles for when dragging is active */
+body.sidebar-dragging {
+  cursor: ew-resize !important;
+  user-select: none;
+}
+
+body.sidebar-dragging * {
+  user-select: none !important;
+}
+
+/* Improve the visual feedback during dragging */
+.sidebar.dragging {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  margin-top: 20px;
+  margin-bottom: 15px;
+  font-weight: 500;
+  color: black;
+}
+
+.link-button,
+.sidebar-toggle {
+  color: var(--text-color);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-toggle[data-pressed] {
+  box-shadow: inset 0 2px 4px rgb(0 0 0 / 0.1);
+}
+
+.sidebar-topbar {
+  width: 100%;
+  height: 36px;
+  background: #f0f0f0;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 8px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.sidebar.open .sidebar-toggle {
+  padding: 2px 2px;
+}
+
+.sidebar.closed .sidebar-toggle {
+  margin-top: 24px;
+  padding: 8px 8px;
+}
