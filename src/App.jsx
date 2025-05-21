@@ -83,6 +83,14 @@ export default function App() {
     }
   }, [selectedNoteId]);
 
+  useEffect(() => {
+    if (selectedNote) {
+      if (selectedNote.tags && Array.isArray(selectedNote.tags)) {
+        setSelectedTags(selectedNote.tags);
+      }
+    }
+  }, [selectedNote]);
+
   const handleNoteDataChange = async (data) => {
     const { processedFields, pictures } = postProcessNoteData(
       data,
@@ -162,6 +170,7 @@ export default function App() {
             onChangeNoteData={handleNoteDataChange}
             initialSelectedTags={selectedTags}
             onChangeTags={setSelectedTags}
+            initialNoteData={selectedNote?.fields}
           />
         </main>
         {error && (

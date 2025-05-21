@@ -3,7 +3,7 @@ import { TagGroup, TagList, Tag, Label, Button } from "react-aria-components";
 import "./note-editor.css";
 import { $generateHtmlFromNodes } from "@lexical/html";
 import { CLEAR_EDITOR_COMMAND } from "lexical";
-import React, { forwardRef, useImperativeHandle, useRef } from "react";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 
 const NoteEditor = forwardRef(function NoteEditor(
   {
