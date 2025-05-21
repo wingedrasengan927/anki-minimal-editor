@@ -6,6 +6,7 @@ import { MathJaxContext } from "better-react-mathjax";
 import NoteEditor from "./components/NoteEditor/NoteEditor";
 import { ErrorModal } from "./components/AnkiComboBox/AnkiComboBox";
 import { postProcessNoteData } from "./utils";
+import AnkiNotesSearch from "./components/AnkiNotesSearch/AnkiNotesSearch";
 
 import "./App.css";
 
@@ -20,12 +21,14 @@ const DISPLAY_DELIMITERS = [
   ["\\[", "\\]"],
 ];
 
+const DEFAULT_TAG = "anki-connect-test";
+
 export default function App() {
   const [deckName, setDeckName] = useState("");
   const [noteType, setNoteType] = useState("");
   const [fieldNames, setFieldNames] = useState([]);
   const [tags, setTags] = useState([]);
-  const [selectedTags, setSelectedTags] = useState(["anki-connect-test"]);
+  const [selectedTags, setSelectedTags] = useState([DEFAULT_TAG]);
   const [noteData, setNoteData] = useState({});
   const [error, setError] = useState(null);
   const noteEditorRef = useRef(null);
@@ -46,6 +49,20 @@ export default function App() {
       setTags([]);
     }
   }, [noteType]);
+
+  useEffect(() => {
+    if (deckName && noteType) {
+      const query = `deck:"${deckName}" note:"${noteType}" tag:"${DEFAULT_TAG}"`;
+      client.note
+        .notesInfo({ query })
+        .then((noteIds) => {
+          setNoteData(noteIds);
+        })
+        .catch((err) => {
+          setError(err.message || "Failed to fetch notes");
+        });
+    }
+  }, [deckName, noteType]);
 
   const handleNoteDataChange = async (data) => {
     const { processedFields, pictures } = postProcessNoteData(
@@ -97,6 +114,7 @@ export default function App() {
           fetchData={client.model.modelNames}
           handleSelectionChange={setNoteType}
         />
+        {deckName && noteType && <AnkiNotesSearch noteData={noteData} />}
       </Sidebar>
       <MathJaxContext
         config={{

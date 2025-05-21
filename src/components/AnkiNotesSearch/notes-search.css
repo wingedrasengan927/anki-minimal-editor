@@ -1,0 +1,197 @@
+.anki-notes-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.anki-notes-label {
+  color: var(--text-color);
+}
+
+.anki-notes-select {
+  color: var(--text-color);
+
+  .anki-notes-select-btn {
+    margin: 0;
+    font-size: 1.072rem;
+    background: var(--field-background);
+    color: var(--field-text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0.286rem 0.3rem 0.286rem 0.571rem;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: default;
+
+    &[data-focused] {
+      outline: 2px solid var(--focus-ring-color);
+      outline-offset: -1px;
+    }
+  }
+
+  .anki-notes-select-val {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &[data-placeholder] {
+      color: var(--text-color-placeholder);
+    }
+  }
+}
+
+.anki-notes-popover {
+  width: var(--trigger-width);
+  --background-color: var(--overlay-background);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 20px rgba(0 0 0 / 0.1);
+  border-radius: 6px;
+  background: var(--background-color);
+  color: var(--text-color);
+  outline: none;
+  transition: transform 200ms, opacity 200ms;
+
+  &[data-entering],
+  &[data-exiting] {
+    transform: var(--origin);
+    opacity: 0;
+  }
+
+  &[data-placement="top"] {
+    --origin: translateY(8px);
+  }
+
+  &[data-placement="bottom"] {
+    --origin: translateY(-8px);
+  }
+}
+
+.anki-notes-search-field {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border: 2px solid rgb(209, 213, 219);
+  margin: 0.5rem;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+}
+
+.anki-notes-search-icon {
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0.5rem;
+  color: var(--text-color);
+}
+
+.anki-notes-search-input {
+  padding: 0.25rem 0.5rem;
+  font-family: "geist", sans-serif;
+  font-weight: 400;
+  flex: 1 1 0%;
+  min-width: 0;
+  border: none;
+  outline: 0;
+  background-color: white;
+  font-size: 1.072rem;
+  color: var(--text-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &[data-placeholder] {
+    color: var(--text-color-placeholder);
+    font-family: "geist", sans-serif;
+    font-weight: 400;
+  }
+}
+
+.anki-notes-search-clear-btn {
+  font-size: 0.875rem;
+  text-align: center;
+  transition-property: all;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 50%;
+  border-width: 0px;
+  padding: 0.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color);
+  background-color: transparent;
+  margin-right: 0.15rem;
+  width: 1.25rem;
+  height: 1.25rem;
+
+  &[data-hovered] {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+.anki-notes-search-clear-btn:active {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.anki-notes-listbox {
+  outline: none;
+  padding: 0.25rem;
+  overflow: auto;
+  scroll-padding-bottom: 0.25rem;
+  list-style: none;
+  margin: 0;
+  max-height: 350px;
+}
+
+.anki-notes-listitem {
+  margin: 2px;
+  padding: 0.286rem 0.571rem;
+  border-radius: 6px;
+  outline: none;
+  cursor: default;
+  color: var(--text-color);
+  font-family: "geist", sans-serif;
+  font-weight: 400;
+  font-size: 1.072rem;
+  gap: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  cursor: default;
+  user-select: none;
+
+  &[data-focus-visible] {
+    outline: none;
+  }
+
+  &[data-selected] {
+    font-weight: bold;
+    background: unset;
+    color: var(--text-color);
+  }
+
+  &[data-focused],
+  &[data-pressed] {
+    background: var(--highlight-background);
+    color: var(--highlight-foreground);
+  }
+}
+
+.anki-notes-listitem-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.anki-notes-listitem-check {
+  width: 1.25rem;
+  display: flex;
+  align-items: center;
+  color: var(--text-color);
+}
