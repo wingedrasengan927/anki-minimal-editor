@@ -21,7 +21,7 @@ import { useState, useEffect } from "react";
 
 import "./notes-search.css";
 
-export default function AnkiNotesSearch({ noteData }) {
+export default function AnkiNotesSearch({ noteData, onNoteIDSelect }) {
   let { contains } = useFilter({ sensitivity: "base" });
   const [parsedNotes, setParsedNotes] = useState([]);
 
@@ -49,7 +49,11 @@ export default function AnkiNotesSearch({ noteData }) {
 
   return (
     <div>
-      <Select className="anki-notes-select" placeholder="select a note">
+      <Select
+        className="anki-notes-select"
+        placeholder="select a note"
+        onSelectionChange={onNoteIDSelect}
+      >
         <div className="anki-notes-label-row">
           <Label className="anki-notes-label">{"Notes"}</Label>
         </div>
@@ -78,6 +82,7 @@ export default function AnkiNotesSearch({ noteData }) {
                 <ListBoxItem
                   className="anki-notes-listitem"
                   textValue={item.textValue}
+                  id={item.id}
                 >
                   {({ isSelected }) => (
                     <>

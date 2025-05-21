@@ -31,6 +31,8 @@ export default function App() {
   const [selectedTags, setSelectedTags] = useState([DEFAULT_TAG]);
   const [noteData, setNoteData] = useState({});
   const [error, setError] = useState(null);
+  const [selectedNoteId, setSelectedNoteId] = useState(null);
+  const [selectedNote, setSelectedNote] = useState(null);
   const noteEditorRef = useRef(null);
 
   useEffect(() => {
@@ -63,6 +65,23 @@ export default function App() {
         });
     }
   }, [deckName, noteType]);
+
+  useEffect(() => {
+    if (selectedNoteId) {
+      client.note
+        .notesInfo({ notes: [selectedNoteId] })
+        .then((noteInfo) => {
+          if (noteInfo && noteInfo.length > 0) {
+            setSelectedNote(noteInfo[0]);
+          }
+        })
+        .catch((err) => {
+          setError(err.message || "Failed to fetch note information");
+        });
+    } else {
+      setSelectedNote(null);
+    }
+  }, [selectedNoteId]);
 
   const handleNoteDataChange = async (data) => {
     const { processedFields, pictures } = postProcessNoteData(
@@ -114,7 +133,12 @@ export default function App() {
           fetchData={client.model.modelNames}
           handleSelectionChange={setNoteType}
         />
-        {deckName && noteType && <AnkiNotesSearch noteData={noteData} />}
+        {deckName && noteType && (
+          <AnkiNotesSearch
+            noteData={noteData}
+            onNoteIDSelect={setSelectedNoteId}
+          />
+        )}
       </Sidebar>
       <MathJaxContext
         config={{
