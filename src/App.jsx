@@ -52,7 +52,7 @@ export default function App() {
     }
   }, [noteType]);
 
-  useEffect(() => {
+  const fetchNoteData = () => {
     if (deckName && noteType) {
       const query = `deck:"${deckName}" note:"${noteType}" tag:"${DEFAULT_TAG}"`;
       client.note
@@ -64,6 +64,10 @@ export default function App() {
           setError(err.message || "Failed to fetch notes");
         });
     }
+  };
+
+  useEffect(() => {
+    fetchNoteData();
   }, [deckName, noteType]);
 
   useEffect(() => {
@@ -91,7 +95,7 @@ export default function App() {
     }
   }, [selectedNote]);
 
-  const handleNoteDataChange = async (data) => {
+  const handleAddNote = async (data) => {
     const { processedFields, pictures } = postProcessNoteData(
       data,
       INLINE_DELIMITERS,
@@ -106,6 +110,7 @@ export default function App() {
         tags: selectedTags,
       },
     };
+
     try {
       if (pictures.length > 0) {
         pictures.forEach((picture) => {
@@ -115,13 +120,115 @@ export default function App() {
       const noteId = await client.note.addNote(note, {
         options: { allowDuplicate: false },
       });
-      clearNoteData();
+
+      // Transform fields from {"fieldName": data} to {"fieldName": {value: data}}
+      const transformedFields = {};
+      Object.keys(processedFields).forEach((fieldName) => {
+        transformedFields[fieldName] = { value: processedFields[fieldName] };
+      });
+
+      const noteModified = {
+        noteId: noteId,
+        fields: transformedFields,
+        tags: selectedTags,
+        modelName: noteType,
+      };
+
+      setNoteData((prevNoteData) =>
+        Array.isArray(prevNoteData)
+          ? [...prevNoteData, noteModified]
+          : [noteModified]
+      );
+      clearEditors();
     } catch (error) {
       setError(error.message || "An error occurred while adding the note.");
     }
   };
 
-  const clearNoteData = () => noteEditorRef.current?.clearNote();
+  const handleUpdateNote = async (data) => {
+    const { processedFields, pictures } = postProcessNoteData(
+      data,
+      INLINE_DELIMITERS,
+      DISPLAY_DELIMITERS
+    );
+
+    try {
+      // Store any new media files
+      if (pictures.length > 0) {
+        for (const picture of pictures) {
+          await client.media.storeMediaFile(picture);
+        }
+      }
+
+      const note = {
+        id: selectedNoteId,
+        fields: processedFields,
+        tags: selectedTags,
+      };
+
+      // Update the note
+      await client.note.updateNote({ note });
+
+      const transformedFields = {};
+      Object.keys(processedFields).forEach((fieldName) => {
+        transformedFields[fieldName] = { value: processedFields[fieldName] };
+      });
+
+      // Update noteData by removing old note and adding updated one
+      setNoteData((prevNoteData) => {
+        if (!Array.isArray(prevNoteData)) return [];
+
+        // Remove the old note and add the updated one
+        const filteredNotes = prevNoteData.filter(
+          (note) => note.noteId !== selectedNoteId
+        );
+
+        const updatedNote = {
+          noteId: selectedNoteId,
+          fields: transformedFields,
+          tags: selectedTags,
+          modelName: noteType,
+        };
+
+        return [...filteredNotes, updatedNote];
+      });
+
+      // Clear the note editor
+      setSelectedNoteId(null);
+      setSelectedNote(null);
+      clearEditors();
+    } catch (error) {
+      setError(error.message || "An error occurred while updating the note.");
+    }
+  };
+
+  const handleDeleteNote = async () => {
+    try {
+      await client.note.deleteNotes({ notes: [selectedNoteId] });
+
+      // Update noteData directly by filtering out the deleted note
+      setNoteData((prevNoteData) =>
+        Array.isArray(prevNoteData)
+          ? prevNoteData.filter((note) => note.noteId !== selectedNoteId)
+          : []
+      );
+
+      setSelectedNoteId(null);
+      setSelectedNote(null);
+      clearEditors();
+    } catch (error) {
+      setError(error.message || "An error occurred while deleting the note.");
+    }
+  };
+
+  const clearEditors = () => noteEditorRef.current?.clearNote();
+
+  const handleNewNote = () => {
+    setSelectedNoteId(null);
+    setSelectedNote(null);
+    setSelectedTags([DEFAULT_TAG]);
+    clearEditors();
+  };
 
   return (
     <div className="app">
@@ -145,6 +252,7 @@ export default function App() {
           <AnkiNotesSearch
             noteData={noteData}
             onNoteIDSelect={setSelectedNoteId}
+            selectedNoteId={selectedNoteId}
           />
         )}
       </Sidebar>
@@ -167,10 +275,14 @@ export default function App() {
             ref={noteEditorRef}
             fieldNames={fieldNames}
             tags={tags}
-            onChangeNoteData={handleNoteDataChange}
-            initialSelectedTags={selectedTags}
+            selectedTags={selectedTags}
             onChangeTags={setSelectedTags}
             initialNoteData={selectedNote?.fields}
+            isEditing={!!selectedNoteId}
+            onAddNote={handleAddNote}
+            onUpdateNote={handleUpdateNote}
+            onDeleteNote={handleDeleteNote}
+            onNewNote={handleNewNote}
           />
         </main>
         {error && (

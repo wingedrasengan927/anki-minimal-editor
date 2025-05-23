@@ -116,7 +116,10 @@
 
 .note-clear-tags,
 .note-add,
-.note-clear {
+.note-clear,
+.note-new,
+.note-update,
+.note-delete {
   color: var(--text-color);
   background: var(--button-background);
   border: 1px solid var(--border-color);
@@ -146,4 +149,12 @@
     border-color: var(--border-color-disabled);
     color: var(--text-color-disabled);
   }
+}
+
+.note-delete {
+  color: brown;
+}
+
+.note-new {
+  color: cadetblue;
 }

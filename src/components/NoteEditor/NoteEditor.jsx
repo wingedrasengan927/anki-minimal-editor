@@ -1,24 +1,28 @@
 import FieldEditor from "../FieldEditor/FieldEditor";
 import { TagGroup, TagList, Tag, Label, Button } from "react-aria-components";
 import "./note-editor.css";
-import { $generateHtmlFromNodes } from "@lexical/html";
-import { CLEAR_EDITOR_COMMAND } from "lexical";
-import { forwardRef, useImperativeHandle, useRef } from "react";
+import { $generateHtmlFromNodes, $generateNodesFromDOM } from "@lexical/html";
+import { CLEAR_EDITOR_COMMAND, $getRoot, $insertNodes } from "lexical";
+import { forwardRef, useImperativeHandle, useRef, useEffect } from "react";
 
 const NoteEditor = forwardRef(function NoteEditor(
   {
     fieldNames,
-    tags = [],
-    initialSelectedTags = [],
+    tags = [], // Tags to be displayed
+    selectedTags = [],
     initialNoteData = {},
-    onChangeNoteData,
     onChangeTags,
+    isEditing = false,
+    onAddNote,
+    onUpdateNote,
+    onDeleteNote,
+    onNewNote,
   },
   ref
 ) {
   const editorRefs = useRef({});
 
-  // Collect fields’ HTML and pass it up via onChangeNoteData
+  // Collect fields' HTML and pass it up via onAddNote
   const handleAdd = () => {
     const newData = {};
     fieldNames.forEach((fieldName) => {
@@ -30,7 +34,21 @@ const NoteEditor = forwardRef(function NoteEditor(
         });
       }
     });
-    onChangeNoteData?.(newData);
+    onAddNote?.(newData);
+  };
+
+  const handleUpdate = () => {
+    const newData = {};
+    fieldNames.forEach((fieldName) => {
+      const editor = editorRefs.current[fieldName];
+
+      if (editor) {
+        editor.read(() => {
+          newData[fieldName] = $generateHtmlFromNodes(editor, null);
+        });
+      }
+    });
+    onUpdateNote?.(newData);
   };
 
   const handleClear = () => {
@@ -41,6 +59,37 @@ const NoteEditor = forwardRef(function NoteEditor(
       }
     });
   };
+
+  const loadNoteData = (noteData) => {
+    // Clear existing content
+    handleClear();
+
+    fieldNames.forEach((fieldName) => {
+      const editor = editorRefs.current[fieldName];
+      const htmlContent = noteData[fieldName]["value"] || "";
+
+      if (editor && htmlContent) {
+        editor.update(() => {
+          const parser = new DOMParser();
+          const dom = parser.parseFromString(htmlContent, "text/html");
+          const nodes = $generateNodesFromDOM(editor, dom);
+
+          $getRoot().selectStart();
+          $insertNodes(nodes);
+        });
+      }
+    });
+  };
+
+  // Initialize editors with content when they're available and initialNoteData changes
+  useEffect(() => {
+    const hasEditors = Object.keys(editorRefs.current).length > 0;
+    const hasData = Object.keys(initialNoteData).length > 0;
+
+    if (hasEditors && hasData) {
+      loadNoteData(initialNoteData);
+    }
+  }, [initialNoteData, fieldNames]);
 
   useImperativeHandle(ref, () => ({
     clearNote: handleClear,
@@ -63,8 +112,8 @@ const NoteEditor = forwardRef(function NoteEditor(
       {tags.length > 0 && (
         <TagGroup
           selectionMode="multiple"
-          selectedKeys={initialSelectedTags}
-          onSelectionChange={onChangeTags}
+          selectedKeys={selectedTags}
+          onSelectionChange={(keys) => onChangeTags(Array.from(keys))}
         >
           <Label>Tags</Label>
           <TagList>
@@ -85,9 +134,24 @@ const NoteEditor = forwardRef(function NoteEditor(
           <Button className="note-clear" onPress={handleClear}>
             Clear
           </Button>
-          <Button className="note-add" onPress={handleAdd}>
-            Add
-          </Button>
+
+          {isEditing ? (
+            <>
+              <Button className="note-update" onPress={handleUpdate}>
+                Update
+              </Button>
+              <Button className="note-delete" onPress={onDeleteNote}>
+                Delete
+              </Button>
+              <Button className="note-new" onPress={onNewNote}>
+                New Note
+              </Button>
+            </>
+          ) : (
+            <Button className="note-add" onPress={handleAdd}>
+              Add
+            </Button>
+          )}
         </div>
       )}
     </div>

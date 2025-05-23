@@ -21,7 +21,11 @@ import { useState, useEffect } from "react";
 
 import "./notes-search.css";
 
-export default function AnkiNotesSearch({ noteData, onNoteIDSelect }) {
+export default function AnkiNotesSearch({
+  noteData,
+  onNoteIDSelect,
+  selectedNoteId,
+}) {
   let { contains } = useFilter({ sensitivity: "base" });
   const [parsedNotes, setParsedNotes] = useState([]);
 
@@ -53,6 +57,7 @@ export default function AnkiNotesSearch({ noteData, onNoteIDSelect }) {
         className="anki-notes-select"
         placeholder="select a note"
         onSelectionChange={onNoteIDSelect}
+        selectedKey={selectedNoteId}
       >
         <div className="anki-notes-label-row">
           <Label className="anki-notes-label">{"Notes"}</Label>
