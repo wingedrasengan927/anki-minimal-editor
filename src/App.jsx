@@ -12,11 +12,12 @@ import "./App.css";
 
 const client = new YankiConnect();
 
-const INLINE_DELIMITERS = [
+export const INLINE_DELIMITERS = [
   ["$", "$"],
   ["\\(", "\\)"],
 ];
-const DISPLAY_DELIMITERS = [
+
+export const DISPLAY_DELIMITERS = [
   ["$$", "$$"],
   ["\\[", "\\]"],
 ];
@@ -277,12 +278,13 @@ export default function App() {
             tags={tags}
             selectedTags={selectedTags}
             onChangeTags={setSelectedTags}
-            initialNoteData={selectedNote?.fields}
+            noteData={selectedNote?.fields}
             isEditing={!!selectedNoteId}
             onAddNote={handleAddNote}
             onUpdateNote={handleUpdateNote}
             onDeleteNote={handleDeleteNote}
             onNewNote={handleNewNote}
+            client={client}
           />
         </main>
         {error && (

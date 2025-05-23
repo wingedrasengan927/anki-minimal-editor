@@ -4,19 +4,26 @@ import "./note-editor.css";
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from "@lexical/html";
 import { CLEAR_EDITOR_COMMAND, $getRoot, $insertNodes } from "lexical";
 import { forwardRef, useImperativeHandle, useRef, useEffect } from "react";
+import {
+  extractPictures,
+  replacePictureData,
+  replaceMathTags,
+} from "../../utils";
+import { INLINE_DELIMITERS, DISPLAY_DELIMITERS } from "../../App";
 
 const NoteEditor = forwardRef(function NoteEditor(
   {
     fieldNames,
     tags = [], // Tags to be displayed
     selectedTags = [],
-    initialNoteData = {},
+    noteData = {},
     onChangeTags,
     isEditing = false,
     onAddNote,
     onUpdateNote,
     onDeleteNote,
     onNewNote,
+    client,
   },
   ref
 ) {
@@ -60,13 +67,36 @@ const NoteEditor = forwardRef(function NoteEditor(
     });
   };
 
-  const loadNoteData = (noteData) => {
+  const loadNoteData = async (noteData, client) => {
     // Clear existing content
     handleClear();
 
+    // get the pictures from the noteData
+    const picturesData = {};
+    const picturesNames = extractPictures(noteData);
+
+    if (picturesNames.length > 0) {
+      for (const pictureName of picturesNames) {
+        const pictureData = await client.media.retrieveMediaFile({
+          filename: pictureName,
+        });
+        picturesData[pictureName] = pictureData;
+      }
+    }
+
     fieldNames.forEach((fieldName) => {
       const editor = editorRefs.current[fieldName];
-      const htmlContent = noteData[fieldName]["value"] || "";
+      let htmlContent = noteData[fieldName]["value"] || "";
+
+      // Replace image src with base64 data URLs
+      htmlContent = replacePictureData(htmlContent, picturesData);
+
+      // Replace math tags with their corresponding HTML
+      htmlContent = replaceMathTags(
+        htmlContent,
+        INLINE_DELIMITERS,
+        DISPLAY_DELIMITERS
+      );
 
       if (editor && htmlContent) {
         editor.update(() => {
@@ -81,15 +111,15 @@ const NoteEditor = forwardRef(function NoteEditor(
     });
   };
 
-  // Initialize editors with content when they're available and initialNoteData changes
+  // Initialize editors with content when they're available and noteData changes
   useEffect(() => {
     const hasEditors = Object.keys(editorRefs.current).length > 0;
-    const hasData = Object.keys(initialNoteData).length > 0;
+    const hasData = Object.keys(noteData).length > 0;
 
     if (hasEditors && hasData) {
-      loadNoteData(initialNoteData);
+      loadNoteData(noteData, client);
     }
-  }, [initialNoteData, fieldNames]);
+  }, [noteData, fieldNames]);
 
   useImperativeHandle(ref, () => ({
     clearNote: handleClear,

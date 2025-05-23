@@ -98,8 +98,13 @@
   margin-right: 2px;
 }
 
-.math-rendered {
+.math-rendered-inline,
+.math-rendered-block {
   cursor: pointer;
+}
+
+.math-rendered-block {
+  display: block;
 }
 
 .math-highlight-block {
