@@ -57,14 +57,14 @@ export function postProcessNoteData(
         if (dataUrlMatch && dataUrlMatch.length === 3) {
           const format = dataUrlMatch[1] || "png";
           const base64Data = dataUrlMatch[2];
-          const randomFileName = `img_${Math.random()
-            .toString(36)
-            .substring(2, 9)}.${format.toLowerCase()}`;
+          // Generate a consistent filename based on image hash
+          const imageHash = generateHashFromBase64(base64Data);
+          const hashedFileName = `img_${imageHash}.${format.toLowerCase()}`;
           pictures.push({
-            filename: randomFileName,
+            filename: hashedFileName,
             data: base64Data,
           });
-          imgElement.setAttribute("src", randomFileName);
+          imgElement.setAttribute("src", hashedFileName);
         }
       }
     });
@@ -110,6 +110,34 @@ export function postProcessNoteData(
     processedFields,
     pictures,
   };
+}
+
+/**
+ * Generates a deterministic hash from base64 data
+ * This ensures the same image data always gets the same filename
+ */
+function generateHashFromBase64(base64Data) {
+  // Simple hash function that produces a reliable 7-character alphanumeric hash
+  let hash = 0;
+  // Use only the first few KB of data for performance if image is large
+  const dataToHash = base64Data.substring(0, 10000);
+
+  for (let i = 0; i < dataToHash.length; i++) {
+    const char = dataToHash.charCodeAt(i);
+    hash = ((hash << 5) - hash + char) & 0x7fffffff; // Keep it positive 31-bit
+  }
+
+  // Convert to base36 and ensure exactly 7 characters
+  let result = hash.toString(36);
+
+  // Pad with leading zeros if needed, or truncate if too long
+  if (result.length < 7) {
+    result = result.padStart(7, "0");
+  } else if (result.length > 7) {
+    result = result.substring(0, 7);
+  }
+
+  return result;
 }
 
 /**
