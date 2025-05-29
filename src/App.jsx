@@ -10,7 +10,7 @@ import AnkiNotesSearch from "./components/AnkiNotesSearch/AnkiNotesSearch";
 
 import "./App.css";
 
-const client = new YankiConnect();
+const client = new YankiConnect({ autoLaunch: true });
 
 export const INLINE_DELIMITERS = [
   ["$", "$"],
