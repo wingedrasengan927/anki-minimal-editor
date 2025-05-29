@@ -22,7 +22,7 @@ export const DISPLAY_DELIMITERS = [
   ["\\[", "\\]"],
 ];
 
-const DEFAULT_TAG = "anki-connect-test";
+const DEFAULT_TAG = "ankieditor";
 
 export default function App() {
   const [deckName, setDeckName] = useState("");
