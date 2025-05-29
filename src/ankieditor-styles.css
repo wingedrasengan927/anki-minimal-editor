@@ -1,20 +1,181 @@
-@import "./font-styles.css";
-@import "./react-aria-theme.css";
+/* Fonts */
+@font-face {
+  font-family: "merriweather";
+  src: url("_Merriweather-Regular.ttf");
+}
+
+@font-face {
+  font-family: "merriweather";
+  src: url("_Merriweather-Bold.ttf");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "merriweather";
+  src: url("_Merriweather-Italic.ttf");
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "merriweather";
+  src: url("_Merriweather-BoldItalic.ttf");
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "merriweather";
+  src: url("_Merriweather-Light.ttf");
+  font-weight: lighter;
+}
+
+@font-face {
+  font-family: "merriweather";
+  src: url("_Merriweather-LightItalic.ttf");
+  font-weight: lighter;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "merriweather-sans";
+  src: url("_MerriweatherSans-Bold.ttf");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "merriweather-sans";
+  src: url("_MerriweatherSans-BoldItalic.ttf");
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "firacode";
+  src: url("_FiraCode-Light.ttf");
+  font-weight: lighter;
+}
+
+@font-face {
+  font-family: "firacode";
+  src: url("_FiraCode-SemiBold.ttf");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "playfair_display";
+  src: url("_PlayfairDisplay-SemiBold.ttf");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "geist";
+  src: url("_Geist-Medium.ttf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "geist";
+  src: url("_Geist-SemiBold.ttf");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "geist";
+  src: url("_Geist-Regular.ttf");
+  font-weight: 400;
+}
+
+/* Themes */
+:root {
+  /* Light Theme */
+  --background-color: #f8f8f8;
+  --gray-50: #ffffff;
+  --gray-100: #d0d0d0;
+  --gray-200: #afafaf;
+  --gray-300: #8f8f8f;
+  --gray-400: #717171;
+  --gray-500: #555555;
+  --gray-600: #393939;
+  --purple-100: #d5c9fa;
+  --purple-200: #b8a3f6;
+  --purple-300: #997cf2;
+  --purple-400: #7a54ef;
+  --purple-500: #582ddc;
+  --purple-600: #3c1e95;
+  --red-100: #f7c4ba;
+  --red-200: #f29887;
+  --red-300: #eb664d;
+  --red-400: #de2300;
+  --red-500: #a81b00;
+  --red-600: #731200;
+  --highlight-hover: rgb(0 0 0 / 0.07);
+  --highlight-pressed: rgb(0 0 0 / 0.15);
+}
+
+/* Semantic colors */
+:root {
+  /* Light theme */
+  --focus-ring-color: var(--purple-400);
+  --text-color: var(--gray-600);
+  --text-color-base: var(--gray-500);
+  --text-color-hover: var(--gray-600);
+  --text-color-disabled: var(--gray-200);
+  --text-color-placeholder: var(--gray-400);
+  --link-color: var(--purple-500);
+  --link-color-secondary: var(--gray-500);
+  --link-color-pressed: var(--purple-600);
+  --border-color: var(--gray-300);
+  --border-color-hover: var(--gray-400);
+  --border-color-pressed: var(--gray-400);
+  --border-color-disabled: var(--gray-100);
+  --field-background: var(--gray-50);
+  --field-text-color: var(--gray-600);
+  --overlay-background: var(--gray-50);
+  --button-background: var(--gray-50);
+  --button-background-pressed: var(--background-color);
+  --highlight-background: #6f46ed; /* purple-300 from dark theme, 3.03:1 against background-color */
+  --highlight-background-pressed: #522acd; /* purple-200 from dark theme */
+  --highlight-background-invalid: #cc2000; /* red-300 from dark theme */
+  --highlight-foreground: white; /* 5.56:1 against highlight-background */
+  --highlight-foreground-pressed: #ddd;
+  --highlight-overlay: rgb(from #6f46ed r g b / 15%);
+  --invalid-color: var(--red-400);
+  --invalid-color-pressed: var(--red-500);
+}
 
 :root {
   --editor-margin-top: 12px;
 }
 
 /* The main class of the editor */
-.editor-input {
+.card,
+.card.nightMode {
   min-height: 64px;
   font-size: 20px;
   line-height: 1.4;
   outline: none;
   font-family: "merriweather", sans-serif;
   color: var(--text-color);
-  width: 100%;
+  width: 50%;
+  background-color: var(--background-color);
+  margin: 0 auto;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.mobile .card,
+.mobile .card.nightMode {
   margin: 0;
+  width: 100%;
+  font-size: 16px;
+  display: block;
 }
 
 .medium-paragraph {
@@ -84,6 +245,10 @@
   margin-top: var(--editor-margin-top);
 }
 
+.mobile .medium-quote {
+  --quote-padding-left: 8px;
+}
+
 .medium-link {
   text-decoration: underline;
   color: var(--text-color);
@@ -97,11 +262,6 @@
   font-size: calc(100% - 2px);
   margin-left: 2px;
   margin-right: 2px;
-}
-
-.math-rendered-inline,
-.math-rendered-block {
-  cursor: pointer;
 }
 
 .math-rendered-block {
@@ -162,8 +322,8 @@
 
 .medium-listitem .medium-ol,
 .medium-listitem .medium-ul {
-  padding-left: 24px;
   margin-top: 0;
+  padding-left: 24px;
 }
 
 .medium-listitem::marker {
@@ -206,7 +366,7 @@
   font-family: "firacode", monospace;
   font-size: 1rem;
   display: block;
-  padding: 1rem 1.5rem 1rem 3rem;
+  padding: 1.5rem 1rem;
   margin-top: var(--editor-margin-top);
   position: relative;
   overflow-x: auto;
@@ -219,6 +379,7 @@
   -o-tab-size: 2;
   white-space: pre;
   overflow-wrap: normal;
+  max-width: 100%;
 }
 
 .code-block:before {
@@ -266,4 +427,20 @@
 
 .tokenFunction {
   color: #db2777;
+}
+
+.code-block span {
+  white-space: pre !important;
+}
+
+/* Mobile specific styles for code block */
+.mobile .code-block {
+  font-size: 0.8rem;
+  line-height: 1.3rem;
+  padding: 1rem 1.2rem;
+}
+
+.mobile .code-block:before {
+  padding: 0.8rem 0.5rem 0.8rem 0.4rem;
+  min-width: 25px;
 }

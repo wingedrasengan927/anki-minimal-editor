@@ -35,8 +35,8 @@ body {
 }
 
 .deck-heading {
-  font-family: "geist", sans-serif;
-  font-weight: 500;
+  font-family: "playfair_display", serif;
+  font-weight: 600;
   color: #333;
   margin-bottom: 32px;
 }
