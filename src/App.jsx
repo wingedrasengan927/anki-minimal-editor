@@ -45,8 +45,15 @@ export default function App() {
 
       client.note
         .getTags()
-        .then(setTags)
-        .catch(() => setTags([]));
+        .then((fetchedTags) => {
+          // Add DEFAULT_TAG if it's not already present
+          if (!fetchedTags.includes(DEFAULT_TAG)) {
+            setTags([DEFAULT_TAG, ...fetchedTags]);
+          } else {
+            setTags(fetchedTags);
+          }
+        })
+        .catch(() => setTags([DEFAULT_TAG]));
     } else {
       setFieldNames([]);
       setTags([]);
