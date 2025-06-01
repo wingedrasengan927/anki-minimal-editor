@@ -37,11 +37,7 @@ const NoteEditor = forwardRef(function NoteEditor(
 
       if (editor) {
         editor.read(() => {
-          let htmlContent = $generateHtmlFromNodes(editor, null);
-          // Replace empty paragraph with empty string
-          if (htmlContent === '<p class="medium-paragraph"><br></p>') {
-            htmlContent = "";
-          }
+          const htmlContent = $generateHtmlFromNodes(editor, null);
           newData[fieldName] = htmlContent;
         });
       }
@@ -56,10 +52,7 @@ const NoteEditor = forwardRef(function NoteEditor(
 
       if (editor) {
         editor.read(() => {
-          let htmlContent = $generateHtmlFromNodes(editor, null);
-          if (htmlContent === '<p class="medium-paragraph"><br></p>') {
-            htmlContent = "";
-          }
+          const htmlContent = $generateHtmlFromNodes(editor, null);
           newData[fieldName] = htmlContent;
         });
       }

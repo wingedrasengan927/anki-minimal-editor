@@ -38,7 +38,14 @@ export function postProcessNoteData(
   const displayDelimPairs = DISPLAY_DELIMITERS || [];
 
   for (const fieldName in fields) {
-    const htmlString = fields[fieldName] || "";
+    let htmlString = fields[fieldName] || "";
+
+    // Check for empty paragraph and replace with empty string
+    if (htmlString === '<p class="medium-paragraph"><br></p>') {
+      processedFields[fieldName] = "";
+      continue;
+    }
+
     if (typeof htmlString !== "string" || !htmlString.trim()) {
       processedFields[fieldName] = htmlString;
       continue;

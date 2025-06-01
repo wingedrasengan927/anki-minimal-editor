@@ -161,6 +161,14 @@ export default function App() {
     );
 
     try {
+      // Check if the note is currently open in Anki
+      const selectedNotesInAnki = await client.graphical.guiSelectedNotes();
+      if (selectedNotesInAnki.includes(selectedNoteId)) {
+        throw new Error(
+          "Cannot update note: This note is currently open in Anki. Please close it first."
+        );
+      }
+
       // Store any new media files
       if (pictures.length > 0) {
         for (const picture of pictures) {
