@@ -1,6 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { Button, Link } from "react-aria-components";
-import { IconMenu2, IconX, IconBrandGithub } from "@tabler/icons-react";
+import {
+  IconMenu2,
+  IconX,
+  IconBrandGithub,
+  IconFileTypeDoc,
+} from "@tabler/icons-react";
 import "./sidebar.css";
 
 export default function Sidebar({
@@ -102,10 +107,17 @@ export default function Sidebar({
             </Button>
             <Link
               className="link-button"
-              href="https://adobe.com/"
+              href="https://github.com/wingedrasengan927/anki-minimal-editor"
               target="_blank"
             >
               <IconBrandGithub size={24} />
+            </Link>
+            <Link
+              className="link-button"
+              href="https://medium.com/swlh/introducing-ankieditor-com-an-open-source-text-interface-for-anki-79ae916f1127"
+              target="_blank"
+            >
+              <IconFileTypeDoc size={24} />
             </Link>
           </>
         )}

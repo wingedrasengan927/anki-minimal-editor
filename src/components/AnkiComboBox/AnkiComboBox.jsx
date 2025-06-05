@@ -31,6 +31,16 @@ export function ErrorModal({ errorMsg, isOpen, onClose }) {
             Error
           </Heading>
           <p>{errorMsg}</p>
+          <p>
+            <a
+              href="https://ms-neerajkrishna.medium.com/79ae916f1127"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="error-docs-link"
+            >
+              View documentation for help
+            </a>
+          </p>
         </Dialog>
       </Modal>
     </ModalOverlay>
