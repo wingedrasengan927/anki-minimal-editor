@@ -1,12 +1,13 @@
-# React + Vite
+<p align="center">
+  <img src="public/ankieditor_logo.svg" alt="AnkiEditor Logo" width="200"/>
+</p>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<h1 align="center">AnkiEditor</h1>
 
-Currently, two official plugins are available:
+<p align="center">
+  Create Anki notes with ease.
+</p>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Documentation
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+For more information, please refer to the [official documentation](https://medium.com/swlh/introducing-ankieditor-com-an-open-source-text-interface-for-anki-79ae916f1127).
