@@ -11,3 +11,7 @@
 ## Documentation
 
 For more information, please refer to the [official documentation](https://medium.com/swlh/introducing-ankieditor-com-an-open-source-text-interface-for-anki-79ae916f1127).
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
