@@ -15,6 +15,11 @@ function stripDelimiters(text, delimiterPairs) {
   return text;
 }
 
+const ANKI_DELIMITERS = [
+  ["\\[", "\\]"],
+  ["\\(", "\\)"],
+];
+
 /**
  * Processes note data to:
  * 1. Find image tags with data URLs, extract data, replace src.
@@ -85,28 +90,33 @@ export function postProcessNoteData(
     // --- 2. MathJax SPAN Transformation (both block and inline) ---
     const mathSpans = body.querySelectorAll('span[data-lexical-math="true"]');
     mathSpans.forEach((span) => {
-      const ankiMathJax = doc.createElement("anki-mathjax");
-
       // Check if this is block math (data-math-inline="false") or inline math (data-math-inline="true")
       const isInline = span.getAttribute("data-math-inline") === "true";
 
+      let mathText;
       if (isInline) {
-        // Inline math
-        ankiMathJax.innerHTML = stripDelimiters(
+        // Inline math - use inline delimiters \\( \\)
+        const strippedContent = stripDelimiters(
           span.innerHTML,
           inlineDelimPairs
         );
+        const [openDelim, closeDelim] = ANKI_DELIMITERS[1]; // \\( \\)
+        mathText = `${openDelim}${strippedContent}${closeDelim}`;
       } else {
-        // Block math (data-math-inline="false")
-        ankiMathJax.setAttribute("block", "true");
-        ankiMathJax.innerHTML = stripDelimiters(
+        // Block math (data-math-inline="false") - use display delimiters \\[ \\]
+        const strippedContent = stripDelimiters(
           span.innerHTML,
           displayDelimPairs
         );
+        const [openDelim, closeDelim] = ANKI_DELIMITERS[0]; // \\[ \\]
+        mathText = `${openDelim}${strippedContent}${closeDelim}`;
       }
 
+      // Create a text node with the delimited math content
+      const textNode = doc.createTextNode(mathText);
+
       if (span.parentNode) {
-        span.parentNode.replaceChild(ankiMathJax, span);
+        span.parentNode.replaceChild(textNode, span);
       } else {
         console.warn(
           "Found a math span without a parentNode, cannot replace:",
