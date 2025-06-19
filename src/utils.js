@@ -97,7 +97,7 @@ export function postProcessNoteData(
       if (isInline) {
         // Inline math - use inline delimiters \\( \\)
         const strippedContent = stripDelimiters(
-          span.innerHTML,
+          span.textContent,
           inlineDelimPairs
         );
         const [openDelim, closeDelim] = ANKI_DELIMITERS[1]; // \\( \\)
@@ -105,7 +105,7 @@ export function postProcessNoteData(
       } else {
         // Block math (data-math-inline="false") - use display delimiters \\[ \\]
         const strippedContent = stripDelimiters(
-          span.innerHTML,
+          span.textContent,
           displayDelimPairs
         );
         const [openDelim, closeDelim] = ANKI_DELIMITERS[0]; // \\[ \\]
