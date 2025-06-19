@@ -126,7 +126,7 @@ export function postProcessNoteData(
     });
 
     // --- 3. Serialization ---
-    processedFields[fieldName] = body.innerHTML;
+    processedFields[fieldName] = decodeEntities(body.innerHTML);
   }
 
   return {
@@ -134,6 +134,13 @@ export function postProcessNoteData(
     pictures,
   };
 }
+
+function decodeEntities(str) {
+  const t = document.createElement('textarea');
+  t.innerHTML = str;
+  return t.value;
+}
+
 
 /**
  * Extracts image filenames from processed fields.
