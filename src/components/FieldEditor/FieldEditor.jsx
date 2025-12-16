@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
-import Editor from "@wingedrasengan927/medium-editor";
-import { initialConfig } from "@wingedrasengan927/medium-editor/config";
+import Editor from "lexical-medium-editor";
+import { initialConfig } from "lexical-medium-editor/config";
 
 import "./field-editor.css";
 

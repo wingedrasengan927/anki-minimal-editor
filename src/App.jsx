@@ -2,7 +2,7 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import AnkiComboBox from "./components/AnkiComboBox/AnkiComboBox";
 import { YankiConnect } from "yanki-connect";
 import { useState, useEffect, useRef } from "react";
-import { MathJaxContext } from "better-react-mathjax";
+
 import NoteEditor from "./components/NoteEditor/NoteEditor";
 import { ErrorModal } from "./components/AnkiComboBox/AnkiComboBox";
 import { postProcessNoteData } from "./utils";
@@ -272,44 +272,32 @@ export default function App() {
           />
         )}
       </Sidebar>
-      <MathJaxContext
-        config={{
-          tex: {
-            inlineMath: INLINE_DELIMITERS,
-            displayMath: DISPLAY_DELIMITERS,
-            noundefined: {
-              color: "red",
-              background: "",
-              size: "",
-            },
-          },
-        }}
-      >
-        <main className="main-content">
-          <h1 className="deck-heading">{deckName}</h1>
-          <NoteEditor
-            ref={noteEditorRef}
-            fieldNames={fieldNames}
-            tags={tags}
-            selectedTags={selectedTags}
-            onChangeTags={setSelectedTags}
-            noteData={selectedNote?.fields}
-            isEditing={!!selectedNoteId}
-            onAddNote={handleAddNote}
-            onUpdateNote={handleUpdateNote}
-            onDeleteNote={handleDeleteNote}
-            onNewNote={handleNewNote}
-            client={client}
-          />
-        </main>
-        {error && (
-          <ErrorModal
-            errorMsg={error}
-            isOpen={!!error}
-            onClose={() => setError(null)}
-          />
-        )}
-      </MathJaxContext>
+
+      <main className="main-content">
+        <h1 className="deck-heading">{deckName}</h1>
+        <NoteEditor
+          ref={noteEditorRef}
+          fieldNames={fieldNames}
+          tags={tags}
+          selectedTags={selectedTags}
+          onChangeTags={setSelectedTags}
+          noteData={selectedNote?.fields}
+          isEditing={!!selectedNoteId}
+          onAddNote={handleAddNote}
+          onUpdateNote={handleUpdateNote}
+          onDeleteNote={handleDeleteNote}
+          onNewNote={handleNewNote}
+          client={client}
+        />
+      </main>
+      {error && (
+        <ErrorModal
+          errorMsg={error}
+          isOpen={!!error}
+          onClose={() => setError(null)}
+        />
+      )}
+
     </div>
   );
 }

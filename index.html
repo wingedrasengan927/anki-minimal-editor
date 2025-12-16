@@ -5,6 +5,35 @@
     <link rel="icon" type="image/svg+xml" href="/ankieditor_logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ankieditor</title>
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+          displayMath: [
+            ["$$", "$$"],
+            ["\\[", "\\]"],
+          ],
+        },
+        chtml: {
+          displayOverflow: "scroll",
+          linebreaks: {
+            inline: true,
+          },
+        },
+        startup: {
+          typeset: false,
+        },
+      };
+    </script>
+    <script
+      type="text/javascript"
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@4.0.0-beta.4/tex-mml-chtml.js"
+    ></script>
   </head>
   <body>
     <div id="root"></div>
