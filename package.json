@@ -14,7 +14,7 @@
     "@lexical/react": "^0.39.0",
     "@tabler/icons-react": "^3.31.0",
     "lexical": "^0.39.0",
-    "lexical-medium-editor": "^1.2.1",
+    "lexical-medium-editor": "^1.2.11",
     "react": "^19.0.0",
     "react-aria-components": "^1.8.0",
     "react-dom": "^19.0.0",
